@@ -13,19 +13,21 @@
 #define KEY_SIZE 16
 #define BLOCK_SIZE 16
 
+
+
 class AES256
 {
     public:
-
-    void SubByte (const ByteAVector& sub_byte_in, ByteAVector &sub_byte_out);
-    void ShiftRows (const ByteAVector& shift_rows_in, ByteAVector &shift_rows_out);
-    void MixColumns (const ByteAVector& mix_columns_in, ByteAVector &mix_columns_out);
-    void AddRoundKey (const ByteAVector& add_round_key_in, ByteAVector &add_round_key_out);
-    void Encrypt(const ByteAVector& plain, ByteAVector &cipher);
+    void State (const ByteAVector& input, unsigned char out[4][4]);
+    void SubBytes ();
+    void ShiftRows ();
+    void MixColumns ();
+    void AddRoundKey ();
+    void Encrypt(const ByteAVector& plain, const ByteAVector &key_in, ByteAVector &cipher);
     void Decrypt(const ByteAVector& cipher, ByteAVector &plain);
 
 private:
-
-    ByteAVector key[KEY_SIZE];
+    unsigned char state[4][4];
+    unsigned char key[4][4];
 
 };
