@@ -7,27 +7,35 @@
 
 #include <vector>
 #include<cstdint>
-#include "sbox.h"
+#include "lookup_tables.h"
+
 #endif //UDACITYCAPSTONE_AES256_AES256_H
 
 #define KEY_SIZE 16
 #define BLOCK_SIZE 16
 
 
+class AES256 {
+public:
+    void State(const ByteAVector &input, unsigned char out[4][4]);
 
-class AES256
-{
-    public:
-    void State (const ByteAVector& input, unsigned char out[4][4]);
-    void SubBytes ();
-    void ShiftRows ();
-    void MixColumns ();
-    void AddRoundKey ();
-    void Encrypt(const ByteAVector& plain, const ByteAVector &key_in, ByteAVector &cipher);
-    void Decrypt(const ByteAVector& cipher, ByteAVector &plain);
+    void SubBytes();
+
+    void ShiftRows();
+
+    void MixColumns();
+
+    void MixMul(unsigned char state_column[4][1], int column);
+
+    void AddRoundKey();
+
+    void Encrypt(const ByteAVector &plain, const ByteAVector &key_in, ByteAVector &cipher);
+
+    void Decrypt(const ByteAVector &cipher, ByteAVector &plain);
 
 private:
     unsigned char state[4][4];
     unsigned char key[4][4];
 
 };
+
