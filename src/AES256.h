@@ -33,9 +33,14 @@ public:
 
     void Decrypt(const ByteAVector &cipher, ByteAVector &plain);
 
+    void KeyExpansion(const ByteAVector &key_in);
+
+    void WordKeyExpansion(unsigned char temp_word[4], int round);
+
 private:
     unsigned char state[4][4];
     unsigned char key[4][4];
+    unsigned char round_key[11][16];
 
 };
 
