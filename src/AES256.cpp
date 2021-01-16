@@ -102,12 +102,27 @@ void AES256::Encrypt(const ByteAVector &plain, const ByteAVector &key_in, ByteAV
         throw std::runtime_error("Encrypt input size error");
     }
     KeyExpansion(key_in);
-//    State(plain, state);
-//    State(key_in, key);
-//    AddRoundKey();
-//    SubBytes();
-//    ShiftRows();
-//    MixColumns();
+    State(plain, state);
+    KeyState(0);
+
+    // Pre-round
+    AddRoundKey();
+
+    // Rounds iteration
+    for (int i = 1; i < 14; i++) {
+        KeyState(i);
+        SubBytes();
+        ShiftRows();
+        MixColumns();
+        AddRoundKey();
+
+    }
+    // Last round (no mix column)
+    KeyState(14);
+    SubBytes();
+    ShiftRows();
+    AddRoundKey();
+
 }
 
 void AES256::Decrypt(const ByteAVector &cipher, ByteAVector &plain) {
@@ -118,19 +133,23 @@ void AES256::Decrypt(const ByteAVector &cipher, ByteAVector &plain) {
 
 
 void AES256::State(const ByteAVector &input, unsigned char out[4][4]) {
-    std::cout << "State \n";
 
+    std::cout << "State \n";
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
             out[i][j] = input[i + j * 4];
-            // debug code
-            std::cout << std::hex << static_cast<int>(out[i][j]) << ",";
         }
-        // debug code
-        std::cout << std::endl;
     }
-    std::cout << std::endl;
+}
 
+void AES256::KeyState(int round) {
+
+    std::cout << "Round :  "<< round <<"\n";
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            key[i][j] = round_key[round][i + j * 4];
+        }
+    }
 }
 
 void AES256::KeyExpansion(const ByteAVector &key_in) {
@@ -140,11 +159,19 @@ void AES256::KeyExpansion(const ByteAVector &key_in) {
     // Initial round key
     for (int i = 0; i < 16; i++) {
         round_key[0][i] = key_in[i];
-    }
-    for (int i = 0; i < 16; i++) {
-        round_key[1][i] = key_in[16 + i];
+        std::cout << std::hex << static_cast<int>(round_key[0][i]) << ",";
 
     }
+    std::cout << std::endl;
+
+    for (int i = 0; i < 16; i++) {
+        round_key[1][i] = key_in[16 + i];
+        std::cout << std::hex << static_cast<int>(round_key[1][i]) << ",";
+
+
+    }
+    std::cout << std::endl;
+
 
     for (int i = 2; i < 15; i++) {
         WordKeyExpansion(temp_word, i);
@@ -180,7 +207,7 @@ void AES256::WordKeyExpansion(unsigned char temp_word[4], int round) {
         Rcon(temp_word, round);
     } else {
         for (int i = 0; i < 4; i++) {
-            temp_word[i] = round_key[round - 1][12+i];
+            temp_word[i] = round_key[round - 1][12 + i];
         }
         for (int i = 0; i < 4; i++)
             std::cout << std::hex << static_cast<int>(temp_word[i]) << ",";

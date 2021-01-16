@@ -19,6 +19,8 @@ class AES256 {
 public:
     void State(const ByteAVector &input, unsigned char out[4][4]);
 
+    void KeyState(int round);
+
     void SubBytes();
 
     void ShiftRows();
@@ -42,7 +44,6 @@ public:
     void SubWord(unsigned char temp_word[4], int round);
 
     void Rcon(unsigned char temp_word[4], int round);
-
 
 
 private:
