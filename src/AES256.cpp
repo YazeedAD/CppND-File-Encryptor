@@ -141,17 +141,20 @@ void AES256::KeyExpansion(const ByteAVector &key_in) {
     for (int i = 0; i < 16; i++) {
         round_key[0][i] = key_in[i];
     }
+    for (int i = 0; i < 16; i++) {
+        round_key[1][i] = key_in[16 + i];
 
+    }
 
-    for (int i = 0; i < 11; i++) {
+    for (int i = 2; i < 15; i++) {
         WordKeyExpansion(temp_word, i);
-        std::cout << "Key: " << i <<  std::endl;
+        std::cout << "Key: " << i << std::endl;
 
         for (int j = 0; j < 16; j++) {
             if (j < 4)
-                round_key[i + 1][j] = round_key[i][j] ^ temp_word[j % 4];
+                round_key[i][j] = round_key[i - 2][j] ^ temp_word[j % 4];
             else
-                round_key[i + 1][j] = round_key[i][j] ^ round_key[i + 1][j - 4];
+                round_key[i][j] = round_key[i - 2][j] ^ round_key[i][j - 4];
 
             std::cout << std::hex << static_cast<int>(round_key[i][j]) << ",";
 
@@ -164,25 +167,52 @@ void AES256::KeyExpansion(const ByteAVector &key_in) {
 
 void AES256::WordKeyExpansion(unsigned char temp_word[4], int round) {
 
+    if (round % 2 == 0) {
+        RotWord(temp_word, round);
+        for (int i = 0; i < 4; i++)
+            std::cout << std::hex << static_cast<int>(temp_word[i]) << ",";
+        std::cout << std::endl;
+        SubWord(temp_word, round);
+        for (int i = 0; i < 4; i++)
+            std::cout << std::hex << static_cast<int>(temp_word[i]) << ",";
+        std::cout << std::endl;
+
+        Rcon(temp_word, round);
+    } else {
+        for (int i = 0; i < 4; i++) {
+            temp_word[i] = round_key[round - 1][12+i];
+        }
+        for (int i = 0; i < 4; i++)
+            std::cout << std::hex << static_cast<int>(temp_word[i]) << ",";
+        std::cout << std::endl;
+
+        SubWord(temp_word, round);
+    }
+}
+
+
+void AES256::RotWord(unsigned char *temp_word, int round) {
     int k;
     for (int i = 0; i < 4; i++) {
         if (i < 3)
             k = (i + 13);
         else
             k = 12;
-        temp_word[i] = round_key[round][k];
-
+        temp_word[i] = round_key[round - 1][k];
     }
+}
 
+void AES256::SubWord(unsigned char *temp_word, int round) {
     for (int i = 0; i < 4; i++) {
         temp_word[i] = s_box[temp_word[i]];
-
     }
-
-    temp_word[0] ^= rcon[round + 1];
-
-
 }
+
+void AES256::Rcon(unsigned char *temp_word, int round) {
+    temp_word[0] ^= rcon[round / 2];
+}
+
+
 
 
 
