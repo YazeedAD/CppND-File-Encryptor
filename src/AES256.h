@@ -33,7 +33,16 @@ public:
 
     void Encrypt(const ByteAVector &plain, const ByteAVector &key_in, ByteAVector &cipher);
 
-    void Decrypt(const ByteAVector &cipher, ByteAVector &plain);
+    void InvSubBytes();
+
+    void InvShiftRows();
+
+    void InvMixColumns();
+
+    void InvMixMul(unsigned char state_column[4][1], int column);
+
+
+    void Decrypt(const ByteAVector &cipher, const ByteAVector &key_in, ByteAVector &plain);
 
     void KeyExpansion(const ByteAVector &key_in);
 
@@ -44,6 +53,8 @@ public:
     void SubWord(unsigned char temp_word[4], int round);
 
     void Rcon(unsigned char temp_word[4], int round);
+
+    void PrintState();
 
 
 private:
