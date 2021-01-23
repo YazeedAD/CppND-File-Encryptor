@@ -5,7 +5,7 @@
 #include <stdexcept>
 #include <cstring>
 #include <iostream>
-#include "AES256.h"
+#include "../include/AES256.h"
 #include <memory>
 
 void AES256::SubBytes() {
