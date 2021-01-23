@@ -16,9 +16,12 @@
 typedef std::vector<unsigned char> ByteAVector;
 
 void ReadKeyFile (const std::string& dir, ByteAVector &key);
-void StringToHex(std::string str, ByteAVector &hex);
+void ReadInputFile(const std::string &dir, ByteAVector &input);
+void CreateOutputFile(const std::string &dir);
+void WriteOutputFile(const std::string &dir, ByteAVector &input);
+
 void StringToHex(const std::string &inStr, unsigned char *outStr);
-bool  CharHexCheck(unsigned char input);
+bool CharHexCheck(unsigned char input);
 
 
 const ByteAVector HEX = //This is the ASCII table in number value form

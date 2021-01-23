@@ -5,35 +5,65 @@
 #include "../include/util.h"
 #include <cstring>
 
-// TODO: Error handling with length
+// TODO: Remove debugging and dead codes
+
 void ReadKeyFile(const std::string &dir, ByteAVector &key) {
 
     std::ifstream stream(dir);
     std::string line;
-//    std::string key_in;
 
-    if (stream.is_open()) {
-        std::getline(stream, line);
-//        key_in = line;
-        stream.close();
+    if (!stream.is_open())
+        throw std::runtime_error("Error opening file");
 
-//        auto *k = new unsigned char[16];
-//        auto *k = &key[0];
-//        std::istringstream key_h(key_in);
+    std::getline(stream, line);
+    stream.close();
+    StringToHex(line, &key[0]);
 
-        StringToHex(line, &key[0]);
-
-        for (int i = 0; i < 32; i++) {
-            std::cout << std::hex << static_cast<int>(key[i]) << ",";
-
-        }
-
-    } else
-        throw std::runtime_error("Couldn't open the file");
-
+    for (int i = 0; i < 32; i++) {
+        std::cout << std::hex << static_cast<int>(key[i]) << ",";
+    }
 
 }
 
+
+void ReadInputFile(const std::string &dir, ByteAVector &input){
+    std::ifstream stream(dir, std::ios::binary );
+    int size;
+    if (!stream.is_open())
+        throw std::runtime_error("Error opening file");
+
+    std::vector<unsigned char> buffer(std::istreambuf_iterator<char>(stream), {});
+    stream.close();
+
+    size = buffer.size();
+    for (auto i : buffer)
+        std::cout << std::hex << static_cast<int>(i) << ",";
+    std::cout << std::endl;
+    std::cout << std::dec << size;
+}
+
+void CreateOutputFile(const std::string &dir) {
+    std::ofstream file;
+    file.open(dir);
+    if(!file.is_open())
+        throw std::runtime_error("Error opening file");
+    file.close();
+
+    // TODO: Remove file after errors
+}
+
+void WriteOutputFile(const std::string &dir, ByteAVector &input){
+    std::ifstream file(dir);
+    if(!file.is_open())
+        throw std::runtime_error("Error opening file");
+    file.close();
+
+    std::ofstream stream(dir,std::ios::app );
+
+    for (auto i: input)
+        stream.write(reinterpret_cast<char*>(&i), sizeof(i));
+    stream.close();
+}
 
 void StringToHex(const std::string &str, unsigned char *out) {
     // dummy variable just to check char value
@@ -64,3 +94,5 @@ bool CharHexCheck(unsigned char input) {
     throw std::invalid_argument("Invalid input string");
 
 }
+
+
