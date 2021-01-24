@@ -18,7 +18,7 @@ typedef std::vector<unsigned char> ByteAVector;
 class InputFile {
 
 public:
-    InputFile(std::string dir){
+    explicit InputFile(std::string dir){
         this->dir = std::move(dir);
     }
     void Open();
@@ -32,12 +32,24 @@ private:
 };
 
 
+class OutputFile {
+
+public:
+    explicit OutputFile(std::string dir){
+        this->dir = std::move(dir);
+    }
+    void Create();
+    void WriteBuffer(ByteAVector &input);
+    void Close();
+
+private:
+    std::ofstream stream;
+    std::string dir;
+
+};
+
 
 void ReadKeyFile(const std::string &dir, ByteAVector &key);
-
-void CreateOutputFile(const std::string &dir);
-
-void WriteOutputFile(const std::string &dir, ByteAVector &input);
 
 void StringToHex(const std::string &inStr, unsigned char *outStr);
 

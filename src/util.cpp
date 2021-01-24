@@ -26,38 +26,64 @@ void ReadKeyFile(const std::string &dir, ByteAVector &key) {
 }
 
 
-void CreateOutputFile(const std::string &dir) {
-    std::ofstream file;
-    file.open(dir);
-    if (!file.is_open())
-        throw std::runtime_error("Error opening file");
-    file.close();
-
-    // TODO: Remove file after errors
+void OutputFile::Create() {
+    stream.open(dir);
+    if (!stream.is_open())
+        throw std::runtime_error("Error creating file");
+    stream.close();
 }
 
-void WriteOutputFile(const std::string &dir, ByteAVector &input) {
-    std::ifstream file(dir);
-    if (!file.is_open())
-        throw std::runtime_error("Error opening file");
-    file.close();
-
-    std::ofstream stream(dir, std::ios::app);
+void OutputFile::WriteBuffer(ByteAVector &input) {
+    stream.open(dir, std::ios::app);
+    if (!stream.is_open())
+        throw std::runtime_error("Error writing file");
 
     for (auto i: input)
         stream.write(reinterpret_cast<char *>(&i), sizeof(i));
     stream.close();
 }
+void OutputFile::Close() {
+
+    stream.close();
+
+}
+void InputFile::Open() {
+    stream.open(dir, std::ios::binary);
+    if (!stream.is_open())
+        throw std::runtime_error("Error opening file");
+
+}
+
+bool InputFile::ReadBuffer(ByteAVector &input) {
+
+    int size;
+    int i = 0;
+    auto *temp = new unsigned char;
+    bool eof;
+    while (!stream.eof() && i < 32) {
+        stream.read(reinterpret_cast<char *>(temp), 1);
+        if (stream.eof())
+            break;
+        input.push_back(*temp);
+        i++;
+    }
+    return stream.eof();
+}
+
+void InputFile::Close() {
+
+    stream.close();
+
+}
 
 void StringToHex(const std::string &str, unsigned char *out) {
-    // dummy variable just to check char value
-    bool is_hex;
+
     int len = str.length();
     if (len != 64)
         throw std::invalid_argument("Invalid input size");
 
     for (int i = 0; i < len; i += 2) {
-        is_hex = CharHexCheck(str[i]);
+        CharHexCheck(str[i]);
         sscanf(str.c_str() + i, "%2hhx", out);
         std::cout << std::hex << static_cast<int>(*out) << ",";
 
@@ -80,31 +106,3 @@ bool CharHexCheck(unsigned char input) {
 }
 
 
-void InputFile::Open() {
-    stream.open(dir, std::ios::binary );
-    if (!stream.is_open())
-        throw std::runtime_error("Error opening file");
-
-}
-
-bool InputFile::ReadBuffer(ByteAVector &input) {
-
-    int size;
-    int i = 0;
-    auto *temp = new unsigned char;
-    bool eof;
-    while (!stream.eof() && i <32 ) {
-        stream.read(reinterpret_cast<char *>(temp), 1);
-        if (stream.eof())
-            break;
-        input.push_back(*temp);
-        i++;
-    }
-    return stream.eof();
-}
-
-void InputFile::Close() {
-
-    stream.close();
-
-}

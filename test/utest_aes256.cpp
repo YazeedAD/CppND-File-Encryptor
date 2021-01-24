@@ -26,7 +26,7 @@ int main() {
 //
 //    AES256AES.Decrypt(cipher_in, key_in, plain_out);
 
-    std::string dir = "/home/y/UdacityCapstone_AES256/test/key";
+    std::string dir = "/home/y/UdacityCapstone_AES256/test/test";
 ////    ReadKeyFile(dir,key_in);
 ////    AES256AES.Encrypt(plain, key_in, cipher);
 //    ReadInputFile(dir,plain_out);
@@ -35,21 +35,12 @@ int main() {
 
 //    CreateOutputFile(dir);
 //    WriteOutputFile(dir,plain);
-bool eof = false;
-ByteAVector  buffer;
-InputFile inf(dir);
-inf.Open();
-while(!eof) {
-    buffer.clear();
-    eof = inf.ReadBuffer(buffer);
-    for (auto i: buffer)
-        std::cout << std::hex << static_cast<int>(i) << ",";
-    std::cout << std::endl;
-    std::cout << std::dec <<buffer.size() <<std::endl;
 
 
-}
-    std::cout << "eof" << std::endl;
+OutputFile of(dir);
+of.Create();
+of.WriteBuffer(plain);
+of.Close();
 
 
 
