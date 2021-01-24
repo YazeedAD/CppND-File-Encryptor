@@ -8,7 +8,7 @@
 // TODO: Remove debugging and dead codes
 
 void ReadKeyFile(const std::string &dir, ByteAVector &key) {
-
+// key should be 32 size
     std::ifstream stream(dir);
     std::string line;
 
@@ -19,9 +19,6 @@ void ReadKeyFile(const std::string &dir, ByteAVector &key) {
     stream.close();
     StringToHex(line, &key[0]);
 
-    for (int i = 0; i < 32; i++) {
-        std::cout << std::hex << static_cast<int>(key[i]) << ",";
-    }
 
 }
 
@@ -85,11 +82,9 @@ void StringToHex(const std::string &str, unsigned char *out) {
     for (int i = 0; i < len; i += 2) {
         CharHexCheck(str[i]);
         sscanf(str.c_str() + i, "%2hhx", out);
-        std::cout << std::hex << static_cast<int>(*out) << ",";
 
         out++;
     }
-    std::cout << std::endl;
 
 }
 

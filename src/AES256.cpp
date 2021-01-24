@@ -79,7 +79,7 @@ void AES256::Encrypt(const ByteAVector &plain, const ByteAVector &key_in, ByteAV
     KeyExpansion(key_in);
     State(plain, state);
     KeyState(0);
-PrintState();
+    PrintState();
     // Pre-round
     AddRoundKey();
 
@@ -152,20 +152,15 @@ void AES256::InvMixColumns() {
 
     }
 
-
 }
 
 void AES256::InvMixMul(unsigned char state_column[4][1], int column) {
     unsigned char tmp[4];
-    tmp[0] = gf_mul14[state_column[0][0]] ^ gf_mul11[state_column[1][0]] ^ gf_mul3[state_column[2][0]] ^
-             gf_mul9[state_column[3][0]];
-    tmp[1] = gf_mul9[state_column[0][0]] ^ gf_mul14[state_column[1][0]] ^ gf_mul11[state_column[2][0]] ^
-             gf_mul13[state_column[3][0]];
-    tmp[2] = gf_mul13[state_column[0][0]] ^ gf_mul9[state_column[1][0]] ^ gf_mul14[state_column[2][0]] ^
-             gf_mul11[state_column[3][0]];
-    tmp[3] = gf_mul11[state_column[0][0]] ^ gf_mul13[state_column[1][0]] ^ gf_mul9[state_column[2][0]] ^
-             gf_mul14[state_column[3][0]];
 
+    tmp[0] = gf_mul14[state_column[0][0]] ^ gf_mul11[state_column[1][0]] ^ gf_mul13[state_column[2][0]] ^ gf_mul9[state_column[3][0]];
+    tmp[1] = gf_mul9[state_column[0][0]] ^ gf_mul14[state_column[1][0]] ^ gf_mul11[state_column[2][0]] ^ gf_mul13[state_column[3][0]];
+    tmp[2] = gf_mul13[state_column[0][0]] ^ gf_mul9[state_column[1][0]] ^ gf_mul14[state_column[2][0]] ^ gf_mul11[state_column[3][0]];
+    tmp[3] = gf_mul11[state_column[0][0]] ^ gf_mul13[state_column[1][0]] ^ gf_mul9[state_column[2][0]] ^ gf_mul14[state_column[3][0]];
     for (int i = 0; i < 4; i++) {
         state[i][column] = tmp[i];
     }
@@ -179,39 +174,53 @@ void AES256::Decrypt(const ByteAVector &cipher, const ByteAVector &key_in, ByteA
     }
     KeyExpansion(key_in);
     State(cipher, state);
+    std::cout << "init" << std::endl;
     PrintState();
-    KeyState(14);
 
+#if true
+    KeyState(14);
     // Pre-round
     AddRoundKey();
+    std::cout << "pre-round" << std::endl;
     PrintState();
 
     // Rounds iteration
     for (int i = 1; i < 14; i++) {
-        KeyState(14-i);
-        InvSubBytes();
-
-        PrintState();
+        KeyState(14 - i);
         InvShiftRows();
+        std::cout << "InvShiftRows" << std::endl;
 
         PrintState();
-        AddRoundKey();
+        InvSubBytes();
+        std::cout << "InvSubBytes" << std::endl;
         PrintState();
+
+
+        AddRoundKey();
+        std::cout << "AddRoundKey" << std::endl;
+        PrintState();
+
         InvMixColumns();
+        std::cout << "InvMixColumns" << std::endl;
+
         PrintState();
 
     }
     // Last round (no mix column)
     KeyState(0);
-    InvSubBytes();
-    PrintState();
     InvShiftRows();
-
+    std::cout << "InvShiftRows" << std::endl;
     PrintState();
+
+    InvSubBytes();
+    std::cout << "InvSubBytes" << std::endl;
+    PrintState();
+
 
     AddRoundKey();
+    std::cout << "AddRoundKey" << std::endl;
     PrintState();
-
+#endif
 
 }
 
@@ -306,12 +315,11 @@ void AES256::Rcon(unsigned char *temp_word, int round) {
 }
 
 void AES256::PrintState() {
-    for (auto &i : state) {
-        for (unsigned char j : i) {
-            std::cout << std::hex << static_cast<int>(j) << ",";
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            std::cout << std::hex << static_cast<int>(state[j][i]) << ",";
         }
         // debug code
-        std::cout << std::endl;
     }
     std::cout << std::endl;
 
