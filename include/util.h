@@ -7,21 +7,43 @@
 #endif //UDACITYCAPSTONE_AES256_UTIL_H
 
 #include <string>
+#include <utility>
 #include <vector>
 #include <fstream>
 #include <iostream>
 #include <sstream>
-
-
 typedef std::vector<unsigned char> ByteAVector;
 
-void ReadKeyFile (const std::string& dir, ByteAVector &key);
-void ReadInputFile(const std::string &dir, ByteAVector &input);
+
+class InputFile {
+
+public:
+    InputFile(std::string dir){
+        this->dir = std::move(dir);
+    }
+    void Open();
+    bool ReadBuffer(ByteAVector &input);
+    void Close();
+
+private:
+    std::ifstream stream;
+    std::string dir;
+
+};
+
+
+
+void ReadKeyFile(const std::string &dir, ByteAVector &key);
+
 void CreateOutputFile(const std::string &dir);
+
 void WriteOutputFile(const std::string &dir, ByteAVector &input);
 
 void StringToHex(const std::string &inStr, unsigned char *outStr);
+
 bool CharHexCheck(unsigned char input);
+
+
 
 
 const ByteAVector HEX = //This is the ASCII table in number value form
