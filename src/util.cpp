@@ -24,7 +24,7 @@ void ReadKeyFile(const std::string &dir, ByteAVector &key) {
 
 
 void OutputFile::Create() {
-    stream.open(dir);
+    stream.open(dir, std::ios::trunc);
     if (!stream.is_open())
         throw std::runtime_error("Error creating file");
     stream.close();
@@ -38,6 +38,7 @@ void OutputFile::WriteBuffer(ByteAVector &input) {
     for (auto i: input)
         stream.write(reinterpret_cast<char *>(&i), sizeof(i));
     stream.close();
+
 }
 void OutputFile::Close() {
 
@@ -57,19 +58,20 @@ bool InputFile::ReadBuffer(ByteAVector &input) {
     int i = 0;
     auto *temp = new unsigned char;
     bool eof;
-    while (!stream.eof() && i < 32) {
+    while (!stream.eof() && i < 16) {
         stream.read(reinterpret_cast<char *>(temp), 1);
         if (stream.eof())
             break;
         input.push_back(*temp);
         i++;
     }
+    delete[] temp;
     return stream.eof();
 }
 
 void InputFile::Close() {
-
-    stream.close();
+    if (stream.is_open())
+        stream.close();
 
 }
 

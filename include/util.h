@@ -4,23 +4,25 @@
 
 #ifndef UDACITYCAPSTONE_AES256_UTIL_H
 #define UDACITYCAPSTONE_AES256_UTIL_H
-#endif //UDACITYCAPSTONE_AES256_UTIL_H
-
 #include <string>
 #include <utility>
 #include <vector>
 #include <fstream>
 #include <iostream>
 #include <sstream>
-typedef std::vector<unsigned char> ByteAVector;
 
+#endif //UDACITYCAPSTONE_AES256_UTIL_H
+
+
+typedef std::vector<unsigned char> ByteAVector;
 
 class InputFile {
 
 public:
-    explicit InputFile(std::string dir){
-        this->dir = std::move(dir);
+     InputFile(const std::string &dir){
+        this->dir = dir;
     }
+
     void Open();
     bool ReadBuffer(ByteAVector &input);
     void Close();
@@ -35,9 +37,10 @@ private:
 class OutputFile {
 
 public:
-    explicit OutputFile(std::string dir){
-        this->dir = std::move(dir);
+     OutputFile(const std::string &dir){
+        this->dir = dir;
     }
+
     void Create();
     void WriteBuffer(ByteAVector &input);
     void Close();

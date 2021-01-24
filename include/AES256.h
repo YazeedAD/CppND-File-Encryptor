@@ -16,6 +16,7 @@
 
 
 class AES256 {
+
 public:
     void State(const ByteAVector &input, unsigned char out[4][4]);
 
