@@ -58,6 +58,11 @@ void StringToHex(const std::string &inStr, unsigned char *outStr);
 
 bool CharHexCheck(unsigned char input);
 
+void Padding(ByteAVector &input);
+
+void PaddingBlock(ByteAVector &input);
+
+ByteAVector XorBuffers(ByteAVector &buffer_1, ByteAVector &buffer_2);
 
 
 

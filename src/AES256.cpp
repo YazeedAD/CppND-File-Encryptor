@@ -108,6 +108,7 @@ void AES256::Encrypt(const ByteAVector &plain, const ByteAVector &key_in, ByteAV
 
 
     int k=0;
+    cipher.clear();
     for (int i=0; i < 4; i++) {
         for (int j = 0; j < 4; j++){
              cipher.push_back(state[j][i]);
