@@ -134,7 +134,7 @@ void Padding(ByteAVector &input){
 void PaddingBlock(ByteAVector &input){
 //  error handling if input is not 16 byte
     if (input.size() != 16)
-        throw std::runtime_error("Error Padding size");
+        throw std::runtime_error("Error PaddingBlock size");
     for (int i = 0; i<15; i++)
         input[i] = input[15];
 }
