@@ -3,6 +3,13 @@ project(UdacityCapstone_AES256)
 
 set(CMAKE_CXX_STANDARD 14)
 
-add_executable(UdacityCapstone_AES256 src/main.cpp include/lookup_tables.h src/AES256.cpp include/AES256.h src/util.cpp include/util.h src/AES256Mode.cpp include/AES256Mode.h)
+find_package(Boost REQUIRED COMPONENTS random)
+if(Boost_FOUND)
+    include_directories(${Boost_INCLUDE_DIRS})
+    add_executable(UdacityCapstone_AES256 src/main.cpp include/lookup_tables.h src/AES256.cpp include/AES256.h src/util.cpp include/util.h src/AES256Mode.cpp include/AES256Mode.h)
+    add_executable(utest test/utest_aes256.cpp include/lookup_tables.h src/AES256.cpp include/AES256.h src/util.cpp include/util.h src/AES256Mode.cpp include/AES256Mode.h)
+    target_link_libraries(utest ${Boost_LIBRARIES})
+endif()
 
-add_executable(utest test/utest_aes256.cpp include/lookup_tables.h src/AES256.cpp include/AES256.h src/util.cpp include/util.h src/AES256Mode.cpp include/AES256Mode.h)
+
+

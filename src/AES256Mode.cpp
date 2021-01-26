@@ -3,6 +3,9 @@
 //
 
 #include "../include/AES256Mode.h"
+#include <boost/nondet_random.hpp>
+
+// TODO: Housekeeping
 
 void AES256Mode::EncCBC() {
     ByteAVector iv(16, 0);
@@ -14,11 +17,15 @@ void AES256Mode::EncCBC() {
     bool need_padding = false;
     bool eof = false;
     int long file_size = 0;
+
     // IV
+    boost::random::random_device rng;
+    for (int i=0 ; i<iv.size(); i++) {
+        iv[i] = rng();
+    }
 
-    ReadKeyFile("/home/y/UdacityCapstone_AES256/test/iv", iv);
+
     std::ifstream file(in_dir_, std::ios::binary | std::ios::ate);
-
     if (!file.is_open())
         throw std::runtime_error("Error opening cipher file");
     file_size = file.tellg();
