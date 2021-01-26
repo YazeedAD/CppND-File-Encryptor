@@ -43,6 +43,7 @@ public:
 
     void Create();
     void WriteBuffer(ByteAVector &input);
+    void WriteBufferPad(ByteAVector &input);
     void Close();
 
 private:

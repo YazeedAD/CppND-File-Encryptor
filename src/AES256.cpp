@@ -79,41 +79,26 @@ void AES256::Encrypt(const ByteAVector &plain, const ByteAVector &key_in, ByteAV
     KeyExpansion(key_in);
     State(plain, state);
     KeyState(0);
-    PrintState();
     // Pre-round
     AddRoundKey();
 
     // Rounds iteration
     for (int i = 1; i < 14; i++) {
         KeyState(i);
-        PrintState();
         SubBytes();
-        PrintState();
         ShiftRows();
-        PrintState();
         MixColumns();
-        PrintState();
         AddRoundKey();
-        PrintState();
 
     }
     // Last round (no mix column)
     KeyState(14);
     SubBytes();
-    PrintState();
     ShiftRows();
-    PrintState();
     AddRoundKey();
-    PrintState();
 
 
-    int k=0;
-    cipher.clear();
-    for (int i=0; i < 4; i++) {
-        for (int j = 0; j < 4; j++){
-             cipher.push_back(state[j][i]);
-        }
-    }
+    State2Block(cipher);
 }
 
 
@@ -181,52 +166,30 @@ void AES256::Decrypt(const ByteAVector &cipher, const ByteAVector &key_in, ByteA
     }
     KeyExpansion(key_in);
     State(cipher, state);
-    std::cout << "init" << std::endl;
-    PrintState();
 
 #if true
     KeyState(14);
     // Pre-round
     AddRoundKey();
-    std::cout << "pre-round" << std::endl;
-    PrintState();
 
     // Rounds iteration
     for (int i = 1; i < 14; i++) {
+
         KeyState(14 - i);
         InvShiftRows();
-        std::cout << "InvShiftRows" << std::endl;
-
-        PrintState();
         InvSubBytes();
-        std::cout << "InvSubBytes" << std::endl;
-        PrintState();
-
-
         AddRoundKey();
-        std::cout << "AddRoundKey" << std::endl;
-        PrintState();
-
         InvMixColumns();
-        std::cout << "InvMixColumns" << std::endl;
-
-        PrintState();
 
     }
     // Last round (no mix column)
     KeyState(0);
     InvShiftRows();
-    std::cout << "InvShiftRows" << std::endl;
-    PrintState();
-
     InvSubBytes();
-    std::cout << "InvSubBytes" << std::endl;
-    PrintState();
-
-
     AddRoundKey();
-    std::cout << "AddRoundKey" << std::endl;
-    PrintState();
+
+    State2Block(plain);
+
 #endif
 
 }
@@ -331,6 +294,17 @@ void AES256::PrintState() {
     std::cout << std::endl;
 
 }
+
+void AES256::State2Block(ByteAVector &block) {
+    int k=0;
+    block.clear();
+    for (int i=0; i < 4; i++) {
+        for (int j = 0; j < 4; j++){
+            block.push_back(state[j][i]);
+        }
+    }
+}
+
 
 
 

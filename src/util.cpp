@@ -46,6 +46,17 @@ void OutputFile::WriteBuffer(ByteAVector &input) {
     stream.close();
 
 }
+
+void OutputFile::WriteBufferPad(ByteAVector &input) {
+    stream.open(dir, std::ios::app);
+    if (!stream.is_open())
+        throw std::runtime_error("Error writing file");
+
+    for (auto i: input)
+        stream.write(reinterpret_cast<char *>(&i), sizeof(i));
+    stream.close();
+
+}
 void OutputFile::Close() {
 
     stream.close();

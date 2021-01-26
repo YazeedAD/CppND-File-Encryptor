@@ -57,6 +57,8 @@ public:
 
     void PrintState();
 
+    void State2Block(ByteAVector &block);
+
 
 private:
     unsigned char state[4][4];
