@@ -8,7 +8,7 @@
 #include <vector>
 #include<cstdint>
 #include "lookup_tables.h"
-
+#include "cli.h"
 #endif //UDACITYCAPSTONE_AES256_AES256_H
 
 #define KEY_SIZE 16

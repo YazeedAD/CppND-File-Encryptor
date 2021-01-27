@@ -83,7 +83,7 @@ bool InputFile::ReadBuffer(ByteAVector &input) {
         input.push_back(*temp);
         i++;
     }
-    delete[] temp;
+    delete temp;
     return stream.eof();
 }
 
