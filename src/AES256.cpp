@@ -20,10 +20,18 @@ void AES256::SubBytes() {
 
 void AES256::ShiftRows() {
 
-    auto temp = new unsigned char[4][4];
-    auto *ptr = state;
+
+    unsigned char temp[4][4];
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+        temp[i][j] = state[i][j];
+
+        }
+    }
+//    auto temp = new unsigned char[4][4];
+//    auto *ptr = state;
     int x;
-    memcpy(temp, ptr, sizeof(state));
+//    memcpy(temp, ptr, sizeof(state));
 
     for (int i = 0; i < 4; i++) {
         for (int j = 0; j < 4; j++) {
@@ -32,7 +40,7 @@ void AES256::ShiftRows() {
         }
 
     }
-    delete[] temp;
+//    delete[] temp;
 }
 
 void AES256::MixColumns() {
@@ -114,10 +122,19 @@ void AES256::InvSubBytes() {
 
 void AES256::InvShiftRows() {
 
-    auto temp = new unsigned char[4][4];
-    auto *ptr = state;
+
+
+    unsigned char temp[4][4];
+    for (int i = 0; i < 4; i++) {
+        for (int j = 0; j < 4; j++) {
+            temp[i][j] = state[i][j];
+
+        }
+    }
+//    auto temp = new unsigned char[4][4];
+//    auto *ptr = state;
     int x;
-    memcpy(temp, ptr, sizeof(state));
+//    memcpy(temp, ptr, sizeof(state));
 
 //    for (int j = 0; j < 4; j++) {
 //        state[0][j] = temp[0][j];
@@ -129,7 +146,7 @@ void AES256::InvShiftRows() {
         }
     }
 
-    delete[] temp;
+//    delete[] temp;
 }
 
 void AES256::InvMixColumns() {

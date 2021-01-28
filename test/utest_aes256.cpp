@@ -62,9 +62,8 @@ int main() {
     AES256Mode AESe(dir_k, dir_p,dir_c);
     AESe.EncCBC();
 
-    AES256Mode AESd(dir_k, dir_c, dir_po);
-    AESd.DecCBC();
-
+//    AES256Mode AESd(dir_k, dir_c, dir_po);
+//    AESd.DecCBC();
 
     return 0;
 }

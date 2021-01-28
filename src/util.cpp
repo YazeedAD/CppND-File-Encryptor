@@ -73,17 +73,20 @@ bool InputFile::ReadBuffer(ByteAVector &input) {
 
     int size;
     int i = 0;
-    auto *temp = new unsigned char;
+    unsigned char temp;
+    auto *temp_ptr = &temp;
+//    auto *temp = new unsigned char;
+
     bool eof;
     input.clear();
     while (!stream.eof() && i < 16) {
-        stream.read(reinterpret_cast<char *>(temp), 1);
+        stream.read(reinterpret_cast<char *>(temp_ptr), sizeof(temp));
         if (stream.eof())
             break;
-        input.push_back(*temp);
+        input.push_back(*temp_ptr);
         i++;
     }
-    delete temp;
+//    delete temp;
     return stream.eof();
 }
 

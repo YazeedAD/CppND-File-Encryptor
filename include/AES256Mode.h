@@ -14,7 +14,7 @@
 class AES256Mode {
 
 public:
-    AES256Mode(std::string key_dir, std::string in_dir, std::string out_dir) :file_in(in_dir),file_out(out_dir) {
+    AES256Mode(const std::string &key_dir, const std::string &in_dir,const std::string &out_dir) :file_in(in_dir),file_out(out_dir) {
         this->key_dir_ = key_dir;
         this->in_dir_ = in_dir;
         this->out_dir_ = out_dir;
