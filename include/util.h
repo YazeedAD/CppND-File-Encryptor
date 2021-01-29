@@ -10,7 +10,7 @@
 #include <fstream>
 #include <iostream>
 #include <sstream>
-
+#define BLOCK_SIZE 16
 #endif //UDACITYCAPSTONE_AES256_UTIL_H
 
 

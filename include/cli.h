@@ -7,6 +7,7 @@
 #include<iostream>
 #include <getopt.h>
 #include <sys/stat.h>
+#include <boost/filesystem/operations.hpp>
 #define RESET   "\033[0m"
 #define BLACK   "\033[30m"      /* Black */
 #define RED     "\033[31m"      /* Red */
@@ -16,8 +17,6 @@
 #define MAGENTA "\033[35m"      /* Magenta */
 #define CYAN    "\033[36m"      /* Cyan */
 #define WHITE   "\033[37m"      /* White */
-#include <boost/filesystem/operations.hpp>
-
 #endif //UDACITYCAPSTONE_AES256_CLI_H
 
 

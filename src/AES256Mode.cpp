@@ -8,22 +8,20 @@
 // TODO: Housekeeping
 
 void AES256Mode::EncCBC() {
-    ByteAVector iv(16, 0);
-    ByteAVector chaining_buffer(16, 0);
-    ByteAVector key_buffer(32, 0);
+    ByteAVector iv(BLOCK_SIZE, 0);
+    ByteAVector chaining_buffer(BLOCK_SIZE, 0);
+    ByteAVector key_buffer(KEY_SIZE, 0);
     ByteAVector plain_buffer;
     ByteAVector cipher_buffer;
     bool is_padded = false;
     bool need_padding = false;
-    bool eof = false;
     int long file_size = 0;
 
-    // IV
+    // Generate random number
     boost::random::random_device rng;
     for (int i=0 ; i<iv.size(); i++) {
         iv[i] = rng();
     }
-
 
     std::ifstream file(in_dir_, std::ios::binary | std::ios::ate);
     if (!file.is_open())
@@ -33,7 +31,7 @@ void AES256Mode::EncCBC() {
     if (file_size <= 0)
         throw std::runtime_error("Error file size");
 
-    if (file_size % 16 != 0)
+    if (file_size % BLOCK_SIZE != 0)
         need_padding = true;
 
     ReadKeyFile(key_dir_, key_buffer);
@@ -43,12 +41,10 @@ void AES256Mode::EncCBC() {
     file_out.WriteBuffer(iv);
     cipher_buffer = iv;
 
-    int k = 0;
     while (!file_in.ReadBuffer(plain_buffer)) {
         chaining_buffer = XorBuffers(cipher_buffer, plain_buffer);
         AES.Encrypt(chaining_buffer, key_buffer, cipher_buffer);
         file_out.WriteBuffer(cipher_buffer);
-        k++;
     }
 
     if (plain_buffer.size() < 16 && need_padding) {
@@ -61,7 +57,7 @@ void AES256Mode::EncCBC() {
     if (!is_padded) {
         // pad zeroization
         plain_buffer.clear();
-        for (int i = 0; i < 16; i++)
+        for (int i = 0; i < BLOCK_SIZE; i++)
             plain_buffer.push_back(0x0);
     }
     PaddingBlock(plain_buffer);
@@ -69,12 +65,11 @@ void AES256Mode::EncCBC() {
     AES.Encrypt(chaining_buffer, key_buffer, cipher_buffer);
     file_out.WriteBuffer(cipher_buffer);
 
-
 }
 
 void AES256Mode::DecCBC() {
-    ByteAVector chaining_buffer(16, 0);
-    ByteAVector key_buffer(32, 0);
+    ByteAVector chaining_buffer(BLOCK_SIZE, 0);
+    ByteAVector key_buffer(KEY_SIZE, 0);
     ByteAVector plain_buffer;
     ByteAVector cipher_buffer;
     ByteAVector cipher_chain;
@@ -92,12 +87,13 @@ void AES256Mode::DecCBC() {
         throw std::runtime_error("Error opening cipher file");
     file_size = file.tellg();
     file.close();
-    if (file_size < 48)
+
+    // Check if the file contains at least IV + last_block + padding_block
+    if (file_size < (3*BLOCK_SIZE))
         throw std::runtime_error("Error file format");
 
-    if (file_size % 16 != 0)
+    if (file_size % BLOCK_SIZE != 0)
         throw std::runtime_error("Error file format");
-
 
     ReadKeyFile(key_dir_, key_buffer);
     file_in.Open();
@@ -106,13 +102,14 @@ void AES256Mode::DecCBC() {
     // read iv
     iv.clear();
     file_in.ReadBuffer(iv);
-    if (iv.size() != 16)
+    if (iv.size() != BLOCK_SIZE)
         throw std::runtime_error("Error reading iv");
 
     cipher_chain = iv;
 
-    blocks = file_size / 16 - 1;
-    int i = 0;
+    blocks = file_size / BLOCK_SIZE - 1;
+
+    // Read until last_block
     while (!eof && blocks > 2) {
         eof = file_in.ReadBuffer(cipher_buffer);
         AES.Decrypt(cipher_buffer, key_buffer, chaining_buffer);
@@ -120,7 +117,6 @@ void AES256Mode::DecCBC() {
         file_out.WriteBuffer(plain_buffer);
         cipher_chain = cipher_buffer;
         blocks--;
-        i++;
     }
 
     if (eof)
@@ -156,6 +152,5 @@ void AES256Mode::DecCBC() {
     }
 
     file_out.WriteBufferPad(plain_buffer);
-
 
 }

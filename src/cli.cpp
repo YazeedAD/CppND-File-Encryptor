@@ -9,7 +9,7 @@ using namespace std;
 
 void ArgsParser(int argc, char **argv, string &input_dir, string &output_dir, string &key_dir, MODE &mode) {
 
-    int opt;
+    int opt=0;
     bool flag_e = false;
     bool flag_d = false;
     bool flag_i = false;
@@ -48,7 +48,7 @@ void ArgsParser(int argc, char **argv, string &input_dir, string &output_dir, st
                 flag_d = true;
                 break;
             case 'h':
-                Usage();
+                Help();
                 break;
             case '?':
                 printf("Unknown option: %c\n", optopt);
@@ -62,23 +62,18 @@ void ArgsParser(int argc, char **argv, string &input_dir, string &output_dir, st
                 Usage();
         }
 
-    if (!(flag_i && flag_o && flag_k && (flag_e != flag_d))){
+    if (flag_e == flag_d)
+        throw std::runtime_error("Either -e or -d can be chosen");
+    // Redundant flag_e , flag_d condition
+    if (!(flag_i && flag_o && flag_k && (flag_e != flag_d))) {
         Usage();
     }
-
-    if (flag_e == flag_d)
-        throw std::runtime_error("Either -e or -d can be chosen") ;
-
-
 
     if (flag_e) {
         cout << "Encryption with CBC-Mode" << endl;
     } else
         cout << "Decryption with CBC-Mode" << endl;
-
-
 }
-
 
 void Usage() {
     cout << "Usage: ./FileEncryptor [options]" << endl;
@@ -94,6 +89,7 @@ void Usage() {
     throw std::runtime_error("Error: usage");
 
 }
+
 void Help() {
     cout << "--------------------------- " << endl;
     cout << "Files Encryptor " << endl;
@@ -112,9 +108,9 @@ void Help() {
     cout << endl << "Note: Verbose mode is not activated" << endl << endl;
 
     throw std::runtime_error("");
-
 }
 
+// To be used in future
 inline bool exists(boost::filesystem::file_status &f) {
     return f.type() != boost::filesystem::status_unknown && f.type() != boost::filesystem::file_not_found;
 }

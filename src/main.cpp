@@ -19,8 +19,7 @@ int main(int argc, char **argv) {
         if (mode == DECRYPTION) {
             AES256Mode AESd(key_dir, input_dir, output_dir);
             AESd.DecCBC();
-//            std::cout << GREEN << "Decrypted file " << output_dir << " is ready " << RESET << std::endl;
-
+            std::cout << GREEN << "Decrypted file " << output_dir << " is ready " << RESET << std::endl;
         }
 
 

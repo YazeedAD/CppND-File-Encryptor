@@ -3,12 +3,11 @@
 //
 
 #ifndef UDACITYCAPSTONE_AES256_AES256MODE_H
-
+#define UDACITYCAPSTONE_AES256_AES256MODE_H
 #include <memory>
 #include "AES256.h"
 #include "util.h"
-
-#define UDACITYCAPSTONE_AES256_AES256MODE_H
+#endif //UDACITYCAPSTONE_AES256_AES256MODE_H
 
 
 class AES256Mode {
@@ -18,11 +17,9 @@ public:
         this->key_dir_ = key_dir;
         this->in_dir_ = in_dir;
         this->out_dir_ = out_dir;
-
     }
 
     void EncCBC();
-
     void DecCBC();
 
 private:
@@ -35,4 +32,3 @@ private:
 };
 
 
-#endif //UDACITYCAPSTONE_AES256_AES256MODE_H
