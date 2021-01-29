@@ -63,7 +63,7 @@ public:
 private:
     unsigned char state[4][4];
     unsigned char key[4][4];
-    unsigned char round_key[14][16];
+    unsigned char round_key[15][16];
 
 };
 
