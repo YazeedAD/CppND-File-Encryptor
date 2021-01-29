@@ -86,7 +86,7 @@ void StringToHex(const std::string &str, unsigned char *out) {
 
     for (int i = 0; i < len; i += 2) {
         CharHexCheck(str[i]);
-        // To be changed (Legacy Function)
+        // TODO: To be changed (Legacy Function)
         sscanf(str.c_str() + i, "%2hhx", out);
         out++;
     }

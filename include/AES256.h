@@ -8,6 +8,7 @@
 #include<cstdint>
 #include "lookup_tables.h"
 #include "cli.h"
+#include <memory>
 #define KEY_SIZE 32
 #define BLOCK_SIZE 16
 #define NUMBER_OF_ROUNDS 14

@@ -7,7 +7,7 @@
 
 using namespace std;
 
-void ArgsParser(int argc, char **argv, string &input_dir, string &output_dir, string &key_dir, MODE &mode) {
+    void ArgsParser(int argc, char **argv, string &input_dir, string &output_dir, string &key_dir, MODE &mode) {
 
     int opt=0;
     bool flag_e = false;
@@ -98,14 +98,15 @@ void Help() {
     cout << "The IV is randomly generated,the key should be provided by the user " << endl;
     cout << "Usage: ./FileEncryptor [options]" << endl;
     cout << "Options: " << endl <<
-         "-h | --help           Path of the output file" << endl <<
          "-i | --input          Path of the input file" << endl <<
          "-o | --output         Path of the output file" << endl <<
          "-k | --key            Path of the key file" << endl <<
          "                      Key should be a hex text with 16 Bytes length" << endl <<
          "-e | --encryption     Run as an encrypting tool" << endl <<
-         "-d | --decryption     Run as a decrypting tool" << endl;
-    cout << endl << "Note: Verbose mode is not activated" << endl << endl;
+         "-d | --decryption     Run as a decrypting tool" << endl <<
+         "-h | --help           This help message" << endl;
+
+                                                    cout << endl << "Note: Verbose mode is not activated" << endl << endl;
 
     throw std::runtime_error("");
 }

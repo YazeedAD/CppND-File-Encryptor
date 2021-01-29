@@ -7,6 +7,7 @@
 #include <memory>
 #include "AES256.h"
 #include "util.h"
+#include <boost/nondet_random.hpp>
 #endif //UDACITYCAPSTONE_AES256_AES256MODE_H
 
 

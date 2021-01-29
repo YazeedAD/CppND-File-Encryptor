@@ -3,9 +3,7 @@
 //
 
 #include "../include/AES256Mode.h"
-#include <boost/nondet_random.hpp>
 
-// TODO: Housekeeping
 
 void AES256Mode::EncCBC() {
     ByteAVector iv(BLOCK_SIZE, 0);

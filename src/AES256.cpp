@@ -4,8 +4,6 @@
 
 
 #include "../include/AES256.h"
-#include <memory>
-
 
 
 void AES256::SubBytes() {
@@ -22,6 +20,7 @@ void AES256::ShiftRows() {
     auto *ptr = state;
     int x=0;
 
+    // TODO: To be changed (Legacy Function)
     memcpy(temp, ptr, sizeof(state));
 
     for (int i = 0; i < STATE_ROW_SIZE; i++) {
