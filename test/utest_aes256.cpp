@@ -4,8 +4,6 @@
 
 #include <iostream>
 #include "../include/AES256Mode.h"
-//#include "../include/AES256.h"
-//#include "../include/util.h"
 
 int main() {
 
@@ -28,36 +26,12 @@ int main() {
 
     };
 
-    std::string dir_k = "/home/y/UdacityCapstone_AES256/test/key";
-    std::string dir_p = "/home/y/UdacityCapstone_AES256/test/plain";
-    std::string dir_po = "/home/y/UdacityCapstone_AES256/test/plain_o";
-    std::string dir_c = "/home/y/UdacityCapstone_AES256/test/cipher";
+    std::string dir_k = "/home/y/FileEncryptor_cpp/test/key";
+    std::string dir_p = "/home/y/FileEncryptor_cpp/test/plain";
+    std::string dir_po = "/home/y/FileEncryptor_cpp/test/plain_o";
+    std::string dir_c = "/home/y/FileEncryptor_cpp/test/cipher";
 
-//    unsigned char out[4][4];
-//    AES256 AES256AES;
-//    ByteAVector key_i(32,0);
-//    ReadKeyFile(dir,key_i);
-//    AES256AES.Decrypt(cipher_in, key_i, plain_out);
 
-////    ReadKeyFile(dir,key_in);
-////    AES256AES.Encrypt(plain, key_in, cipher);
-////    ReadInputFile(dir,plain_out);
-//
-//
-//
-////    CreateOutputFile(dir);
-////    WriteOutputFile(dir,plain);
-//
-//
-//OutputFile of(dir_c);
-//of.Create();
-//of.WriteBuffer(plain);
-//of.WriteBuffer(plain);
-//of.Close();
-
-//InputFile i_f(dir_p);
-//i_f.Open();
-//i_f.ReadBuffer(plain_out);
 //
     AES256Mode AESe(dir_k, dir_p,dir_c);
     AESe.EncCBC();

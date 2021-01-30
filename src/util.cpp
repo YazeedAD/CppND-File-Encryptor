@@ -65,8 +65,8 @@ bool InputFile::ReadBuffer(ByteAVector &input) {
     auto *temp = new unsigned char;
 
     input.clear();
-    while (!stream.eof() && i < 16) {
-        stream.read(reinterpret_cast<char *>(temp), sizeof(temp));
+    while (!stream.eof() && i < BLOCK_SIZE) {
+        stream.read(reinterpret_cast<char *>(temp), 1);
         if (stream.eof())
             break;
         input.push_back(*temp);

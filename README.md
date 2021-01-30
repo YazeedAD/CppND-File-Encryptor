@@ -11,12 +11,12 @@ The key length is 256-bit provided by the user as a text file with 32 hex charac
 The [IV](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Initialization_vector_(IV)) for the [CBC](https://en.wikipedia.org/wiki/Block_cipher_mode_of_operation#Cipher_block_chaining_(CBC)) is randomly generated during encryption and written as header at the output file. 
 Padding is preformed for the input file with [PKCS#7](https://en.wikipedia.org/wiki/Padding_(cryptography)#PKCS#5_and_PKCS#7) as specified in [RFC 2315](https://www.ietf.org/rfc/rfc2315.txt).
 
-The implementation was tested against teh test vectors provided by NIST at FIPS-197, and using [cryptool](https://www.cryptool.org/en/cto/highlights/aes-step-by-step) for more verification.
+The implementation was tested against teh test vectors provided by [NIST](https://www.nist.gov/) at [FIPS-197](https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf), and using [cryptool](https://www.cryptool.org/en/cto/highlights/aes-step-by-step) for more verification.
  
 
 #### Disclaimer:
 This project is intended for educational purpose only,  it doesn't guarantee the security or the reliability of the output files. 
-Don't use it for any sensitive data or system, for that kind of usage it's recommended to use well tested libraries such as openssl or crpto++.
+Don't use it for any sensitive data or system.
  
 
 
@@ -73,7 +73,7 @@ The user should provide the the input file path, the output file path, the key p
 The key format should be 32 byte hex-written string as in the provided key file at ``FileEncryptor_cpp/test/key``.
 
 ### Block Diagram
-
+<img src="system_structure.png"/>
 
 ##  Rubric Points
 | Criteria | Note | Location |
