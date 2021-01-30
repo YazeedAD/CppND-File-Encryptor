@@ -72,7 +72,7 @@ void AES256::AddRoundKey() {
 
 void AES256::Encrypt(const ByteAVector &plain, const ByteAVector &key_in, ByteAVector &cipher) {
     if (plain.size() != BLOCK_SIZE) {
-        throw std::runtime_error("Encrypt input size error");
+        throw std::runtime_error("Error with input block size");
     }
     KeyExpansion(key_in);
     State(plain, state);
@@ -149,7 +149,7 @@ void AES256::InvMixMul(unsigned char state_column[WORD_SIZE][1], int column) {
 
 void AES256::Decrypt(const ByteAVector &cipher, const ByteAVector &key_in, ByteAVector &plain) {
     if (cipher.size() != BLOCK_SIZE) {
-        throw std::runtime_error("Decrypt input size error");
+        throw std::runtime_error("Error with input block size");
     }
     KeyExpansion(key_in);
     State(cipher, state);

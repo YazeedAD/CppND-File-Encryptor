@@ -23,11 +23,11 @@ void AES256Mode::EncCBC() {
 
     std::ifstream file(in_dir_, std::ios::binary | std::ios::ate);
     if (!file.is_open())
-        throw std::runtime_error("Error opening cipher file");
+        throw std::runtime_error("Error during opening input file");
     file_size = file.tellg();
     file.close();
     if (file_size <= 0)
-        throw std::runtime_error("Error file size");
+        throw std::runtime_error("Error with plain file size");
 
     if (file_size % BLOCK_SIZE != 0)
         need_padding = true;
@@ -82,16 +82,16 @@ void AES256Mode::DecCBC() {
     std::ifstream file(in_dir_, std::ios::binary | std::ios::ate);
 
     if (!file.is_open())
-        throw std::runtime_error("Error opening cipher file");
+        throw std::runtime_error("Error during opening cipher input file");
     file_size = file.tellg();
     file.close();
 
     // Check if the file contains at least IV + last_block + padding_block
     if (file_size < (3*BLOCK_SIZE))
-        throw std::runtime_error("Error file format");
+        throw std::runtime_error("Error with file format");
 
     if (file_size % BLOCK_SIZE != 0)
-        throw std::runtime_error("Error file format");
+        throw std::runtime_error("Error with file format");
 
     ReadKeyFile(key_dir_, key_buffer);
     file_in.Open();
@@ -101,7 +101,7 @@ void AES256Mode::DecCBC() {
     iv.clear();
     file_in.ReadBuffer(iv);
     if (iv.size() != BLOCK_SIZE)
-        throw std::runtime_error("Error reading iv");
+        throw std::runtime_error("Error during reading iv");
 
     cipher_chain = iv;
 
@@ -118,10 +118,10 @@ void AES256Mode::DecCBC() {
     }
 
     if (eof)
-        throw std::runtime_error("Error reading file");
+        throw std::runtime_error("Error during reading cipher input file");
 
     if (file_in.ReadBuffer(cipher_buffer))
-        throw std::runtime_error("Error reading last_block");
+        throw std::runtime_error("Error during reading last_block");
 
 
     AES.Decrypt(cipher_buffer, key_buffer, chaining_buffer);
@@ -129,7 +129,7 @@ void AES256Mode::DecCBC() {
     cipher_chain = cipher_buffer;
 
     if (file_in.ReadBuffer(cipher_buffer))
-        throw std::runtime_error("Error reading padding_block");
+        throw std::runtime_error("Error during reading padding_block");
 
     AES.Decrypt(cipher_buffer, key_buffer, chaining_buffer);
     padding_block = XorBuffers(cipher_chain, chaining_buffer);
@@ -142,7 +142,7 @@ void AES256Mode::DecCBC() {
 
     if (is_padded) {
         if (padding_block[0] != last_block[15])
-            throw std::runtime_error("file has been modified!");
+            throw std::runtime_error("Error file has been modified!");
         plain_buffer.clear();
         pad_bytes = int(padding_block[0]);
         for (int i = 0; i < (16 - pad_bytes); i++)

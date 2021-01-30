@@ -17,7 +17,7 @@ void ReadKeyFile(const std::string &dir, ByteAVector &key) {
     int k = key.size();
     int len = line.length();
     if (len != k * 2)
-        throw std::invalid_argument("Invalid input size");
+        throw std::invalid_argument("Error invalid input size");
     StringToHex(line, &key[0]);
 }
 
@@ -99,7 +99,7 @@ bool CharHexCheck(unsigned char input) {
         return true;
     if (input >= 'a' && input <= 'f')
         return true;
-    throw std::invalid_argument("Invalid input string");
+    throw std::invalid_argument("Error invalid input string");
 
 }
 
